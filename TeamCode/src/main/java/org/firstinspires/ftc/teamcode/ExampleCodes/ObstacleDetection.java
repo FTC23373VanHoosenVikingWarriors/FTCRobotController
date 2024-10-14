@@ -5,15 +5,19 @@ In this modified code, a DistanceSensor is used to detect obstacles.
 When an obstacle is detected within a certain threshold distance,
 the robot stops and executes a maneuver to go around the obstacle before resuming its original path.
  */
-
+/*
 package org.firstinspires.ftc.teamcode.ExampleCodes;
 
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
+
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+
 
 @Autonomous(name = "Odometry Obstacle Avoidance", group = "Linear Opmode")
 public class OdometryObstacleAvoidance extends LinearOpMode {
@@ -133,3 +137,4 @@ public class OdometryObstacleAvoidance extends LinearOpMode {
         rightDrive.setPower(0);
     }
 }
+*/
