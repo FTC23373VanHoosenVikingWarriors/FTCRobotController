@@ -144,8 +144,8 @@ public class ArmMot extends LinearOpMode{
             //control arm
             if(gamepad2.left_stick_y != 0) {
                 //limit power to arm motor after a particular number of rotations todo
-                Armmot1.setPower((varArmmot1) / 0.9);
-                Armmot2.setPower((varArmmot2) / 0.9);
+                Armmot1.setPower((varArmmot1) / 2);
+                Armmot2.setPower((varArmmot2) / 2);
             }
             else
             {
