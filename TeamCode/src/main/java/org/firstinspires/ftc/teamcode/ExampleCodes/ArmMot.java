@@ -63,8 +63,7 @@ public class ArmMot extends LinearOpMode{
         double varViper;
 
         double drivePower = 0.55; //global drive power level
-        boolean holdArmPosition = true; //variable to hold arm in position , to prevent arm falling down due to gravity
-
+        
 
 //Hardware maps
         FLM = hardwareMap.get(DcMotor.class, "FLM");
@@ -81,13 +80,16 @@ public class ArmMot extends LinearOpMode{
         Armmot1 = hardwareMap.get(DcMotor.class, "armmot1");
         Armmot1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         Armmot1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);//make use of encoder to limit spin of motor so we dont damage arm
+        Armmot1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE); 
         Armmot2 = hardwareMap.get(DcMotor.class, "armmot2");
         Armmot2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         Armmot2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);//make use of encoder to limit spin of motor so we dont damage arm
+        Armmot2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         viper = hardwareMap.get(DcMotor.class, "viper");
         viper.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         viper.setMode(DcMotor.RunMode.RUN_USING_ENCODER);//make use of encoder to limit spin of motor so we dont damage arm
+        viper.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         gripper = hardwareMap.get(Servo.class, "gripper");
         //gripper.setPosition();
@@ -149,21 +151,11 @@ public class ArmMot extends LinearOpMode{
             }
             else
             {
-                if(holdArmPosition) {
-                    //hold arm in  position
-                    Armmot1.setPower(0.1);
-                    Armmot2.setPower(0.1);
-                    holdArmPosition = false;
-                }
-                else
-                {
-                    Armmot1.setPower(-0.1);
-                    Armmot2.setPower(-0.1);
-                    holdArmPosition = true;
-                }
+                 //limit power to arm motor after a particular number of rotations todo
+                Armmot1.setPower(0);
+                Armmot2.setPower(0);
             }
-            Armmot2.getCurrentPosition();
-
+            
             //viper.setPower(varViper/ 0.9); //arm extension , this code needs to be refined.
             //Viper Control
             if (gamepad2.dpad_up) {
