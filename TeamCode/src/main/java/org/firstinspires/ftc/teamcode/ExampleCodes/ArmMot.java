@@ -107,7 +107,10 @@ public class ArmMot extends LinearOpMode{
         maArmCounts = maxArmDistance * (COUNTS_PER_ROTATION / (Math.PI * wheelDiameter)); // Calculate counts based on wheel diameter
 
         
-
+        FLM.setDirection(DcMotor.Direction.REVERSE);
+        FRM.setDirection(DcMotor.Direction.FORWARD);
+        RRM.setDirection(DcMotor.Direction.REVERSE);
+        RLM.setDirection(DcMotor.Direction.FORWARD);
         Armmot1.setDirection(DcMotor.Direction.FORWARD);
         Armmot2.setDirection(DcMotor.Direction.FORWARD);
         viper.setDirection(DcMotor.Direction.FORWARD);
@@ -116,7 +119,8 @@ public class ArmMot extends LinearOpMode{
        
         
         viper.setPower(-0.3); //Lift viper above ground so it does not get dragged with robot
-        sleep(1000);
+        sleep(300);
+        viper.setPower(0);
         // Wait for the game to start (driver presses PLAY)
 
         telemetry.addData("VW Robot", "Initialized");
