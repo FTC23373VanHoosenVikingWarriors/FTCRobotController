@@ -5,23 +5,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
-/*************************************************************************************
- * Robot Control keys
- * Servo - gamepad2.right_bumper
- * Viper/Arm extend - gamepad2.dpad_up
- * Viper/Arm retract - gamepad2.dpad_down
- * Arm swing - gamepad2.left_stick_y
- * driveY = -gamepad1.left_stick_y;
- * strafe = gamepad1.left_stick_x;
- * turn = gamepad1.right_stick_x;
- *
- *************************************************************************************/
-
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-
 
 @TeleOp(name="ArmMotOpMode", group="Final")
 
@@ -39,8 +22,7 @@ public class ArmMot extends LinearOpMode{
     DcMotor RRM;
     DcMotor FLM;
     DcMotor FRM;
-    DcMotor Armmot1 ;
-    DcMotor Armmot2 ;
+    DcMotor Armmot ;
     DcMotor viper;
     Servo gripper;
 
@@ -53,12 +35,15 @@ public class ArmMot extends LinearOpMode{
     private int odoEncoderXValue = 0;
     private int odoEncoderYValue = 0;
 
-    static final int    MAX_POS_VIPER_ENCODE_VALUE    =   1150;     // Control Max stretch of viper motor to avoid mechanical stress
-    static final int    MAX_NEG_VIPER_ENCODE_VALUE    =   -250;     // Control Max stretch of viper motor to avoid mechanical stress
+    static final int    MAX_POS_VIPER_ENCODE_VALUE    =   2600;     // Control Max stretch of viper motor to avoid mechanical stress
+    static final int    MAX_NEG_VIPER_ENCODE_VALUE    =   -100;     // Control Max stretch of viper motor to avoid mechanical stress
 
-    static final int    MAX_POS_ARM_ENCODE_VALUE    =   1150;     // Control Max stretch of arm motors to avoid mechanical stress
-    static final int    MAX_NEG_ARM_ENCODE_VALUE    =   -250;     // Control Max stretch of arm motors to avoid mechanical stress
+    static final int    MAX_POS_ARM_ENCODE_VALUE    =   2700;     // Control Max stretch of arm motors to avoid mechanical stress
+    static final int    MAX_NEG_ARM_ENCODE_VALUE    =   0;     // Control Max stretch of arm motors to avoid mechanical stress
 
+    static final int    VIPER_RETRACT_EREDNG_FRM_GRND = -100; //encoder reading which keep viper/gripeer from up from mother earth , this avoid gripper drag
+    static final int    ARM_ENCODER_READING_AFTER_START = 2000; //Initial reading where ARM could be for first operation driver wants to perform
+    static final int    VIPER_ENCODER_READING_AFTER_START = 2000; //Initial reading where viper could be for first operation driver wants to perform
 
     @Override
     public void runOpMode() {
@@ -67,33 +52,37 @@ public class ArmMot extends LinearOpMode{
         double driveY = 0;
         double strafe = 0;
         double turn = 0;
-        double varArmmot1;
-        double varArmmot2;
-        double varViper;
-
+        double varArmmot;
+        int armHoldReading = ARM_ENCODER_READING_AFTER_START; //Initial reading where ARM could be for first operation driver wants to perform
+        int viperHoldReading = VIPER_ENCODER_READING_AFTER_START;//Initial reading where viper could be for first operation driver wants to perform
         double drivePower = 0.55; //global drive power level
-        
+
 
 //Hardware maps
         FLM = hardwareMap.get(DcMotor.class, "FLM");
-        FLM.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        FLM.setMode(DcMotor.RunMode.RUN_USING_ENCODER);//odo x
+    //    FLM.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    //    FLM.setMode(DcMotor.RunMode.RUN_USING_ENCODER);//odo x
+    //    FLM.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         FRM = hardwareMap.get(DcMotor.class, "FRM");
-        FRM.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        FRM.setMode(DcMotor.RunMode.RUN_USING_ENCODER);//odo Y
+    //    FRM.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    //    FRM.setMode(DcMotor.RunMode.RUN_USING_ENCODER);//odo Y
+    //    FRM.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         RRM = hardwareMap.get(DcMotor.class, "RRM");
-        RLM = hardwareMap.get(DcMotor.class, "RLM");
+    //    RRM.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    //    RRM.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    //    RRM.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        Armmot1 = hardwareMap.get(DcMotor.class, "armmot1");
-        Armmot1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        Armmot1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);//make use of encoder to limit spin of motor so we dont damage arm
-        Armmot1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE); 
-        Armmot2 = hardwareMap.get(DcMotor.class, "armmot2");
-        Armmot2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        Armmot2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);//make use of encoder to limit spin of motor so we dont damage arm
-        Armmot2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        RLM = hardwareMap.get(DcMotor.class, "RLM");
+    //    RLM.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    //    RLM.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    //    RLM.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        Armmot = hardwareMap.get(DcMotor.class, "armmot");
+        Armmot.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        Armmot.setMode(DcMotor.RunMode.RUN_USING_ENCODER);//make use of encoder to limit spin of motor so we dont damage arm
+        Armmot.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         viper = hardwareMap.get(DcMotor.class, "viper");
         viper.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -106,22 +95,22 @@ public class ArmMot extends LinearOpMode{
         maxArmDistance = 12; // Change this value as needed
         maArmCounts = maxArmDistance * (COUNTS_PER_ROTATION / (Math.PI * wheelDiameter)); // Calculate counts based on wheel diameter
 
-        
+
+
         FLM.setDirection(DcMotor.Direction.REVERSE);
         FRM.setDirection(DcMotor.Direction.FORWARD);
         RRM.setDirection(DcMotor.Direction.REVERSE);
         RLM.setDirection(DcMotor.Direction.FORWARD);
-        Armmot1.setDirection(DcMotor.Direction.FORWARD);
-        Armmot2.setDirection(DcMotor.Direction.FORWARD);
-        viper.setDirection(DcMotor.Direction.FORWARD);
-        Armmot1.setPower(0);
-        Armmot2.setPower(0);
-       
-        
+        Armmot.setDirection(DcMotor.Direction.REVERSE);
+        viper.setDirection(DcMotor.Direction.REVERSE);
+        Armmot.setPower(0);
+
+        viper.setTargetPosition(VIPER_RETRACT_EREDNG_FRM_GRND);
+        viper.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         viper.setPower(-0.3); //Lift viper above ground so it does not get dragged with robot
-        sleep(300);
-        viper.setPower(0);
+
         // Wait for the game to start (driver presses PLAY)
+
 
         telemetry.addData("VW Robot", "Initialized");
         telemetry.update();
@@ -138,7 +127,7 @@ public class ArmMot extends LinearOpMode{
             // This ensures all the powers maintain the same ratio,
             // but only if at least one is out of the range [-1, 1]
             double denominator = Math.max(Math.abs(driveY) + Math.abs(strafe) + Math.abs(turn), 1);
-            
+
             double frontLeftPower = (driveY + strafe + turn) / denominator;
             double backLeftPower = (driveY - strafe + turn) / denominator;
             double frontRightPower = (driveY - strafe - turn) / denominator;
@@ -153,45 +142,60 @@ public class ArmMot extends LinearOpMode{
             odoEncoderXValue = FRM.getCurrentPosition();
             odoEncoderYValue = FLM.getCurrentPosition();
             viperEncoderValue = viper.getCurrentPosition();
-            armEncoderValue = Armmot1.getCurrentPosition();
-            
-            varArmmot1 = gamepad2.left_stick_y;
-            varArmmot2 = gamepad2.left_stick_y;
+            armEncoderValue = Armmot.getCurrentPosition();
+
+            varArmmot = gamepad2.left_stick_y;
             //varViper = gamepad2.right_stick_x;
 
 
             //control arm
-            if((gamepad2.left_stick_y != 0)  && 
-               (armEncoderValue < MAX_POS_ARM_ENCODE_VALUE) &&
-               (armEncoderValue > MAX_NEG_ARM_ENCODE_VALUE)
-              ) {
+            if((varArmmot != 0)   &&
+                    (armEncoderValue <= MAX_POS_ARM_ENCODE_VALUE) &&
+                    (armEncoderValue >= MAX_NEG_ARM_ENCODE_VALUE)
+            ) {
                 //limit power to arm motor after a particular number of rotations todo
-                Armmot1.setPower((varArmmot1) / 2);
-                Armmot2.setPower((varArmmot2) / 2);
+
+                //Armmot.setTargetPosition(2300);
+                //Armmot.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                Armmot.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                Armmot.setPower(varArmmot / 2);
+                armHoldReading = Armmot.getCurrentPosition();
             }
             else
             {
-                 //limit power to arm motor after a particular number of rotations todo
-                Armmot1.setPower(0);
-                Armmot2.setPower(0);
+
+                Armmot.setTargetPosition(armHoldReading);
+                Armmot.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                Armmot.setPower(0.4);
+                //limit power to arm motor after a particular number of rotations todo
+                //Armmot.setPower(0);
+                //Armmot.setTargetPosition(Armmot.getCurrentPosition());
             }
-            
-          
+
+
             //Viper Control
-            if ((gamepad2.dpad_up)  && (viperEncoderValue < MAX_POS_VIPER_ENCODE_VALUE)) {
-                viper.setPower(0.3);
-            } else if (gamepad2.dpad_down && (viperEncoderValue > MAX_NEG_VIPER_ENCODE_VALUE)) {
-                viper.setPower(-0.3);
+            if ((gamepad2.dpad_up)   && (viperEncoderValue <= MAX_POS_VIPER_ENCODE_VALUE)) {
+
+                viper.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                viper.setPower(0.6);
+                viperHoldReading = viper.getCurrentPosition();
+            } else if (gamepad2.dpad_down  && (viperEncoderValue >= MAX_NEG_VIPER_ENCODE_VALUE) ) {
+
+                viper.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                viper.setPower(-0.6);
+                viperHoldReading = viper.getCurrentPosition();
             } else {
-                viper.setPower(0);
+                viper.setTargetPosition(viperHoldReading);
+                viper.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                viper.setPower(0.1);
             }
 
             //grab using gripper
             if(gamepad2.right_bumper){
-                gripper.setPosition(1);
+                gripper.setPosition(0.5);
             }
             else{
-                gripper.setPosition(0);
+                gripper.setPosition(0.2);
             }
 
             // Adding telemetry readouts
@@ -203,6 +207,8 @@ public class ArmMot extends LinearOpMode{
             telemetry.addData("ODO Y encoder", odoEncoderYValue);
             telemetry.addData("viper encoder", viperEncoderValue);
             telemetry.addData("arm encoder", armEncoderValue);
+            telemetry.addData("gamepad2 left_stick_y", gamepad2.left_stick_y);
+
             telemetry.update();
         } //whileOpMode end
 
