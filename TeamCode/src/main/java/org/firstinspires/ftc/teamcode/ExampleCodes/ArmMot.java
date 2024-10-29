@@ -42,24 +42,24 @@ public class ArmMot extends LinearOpMode{
     private int odoEncoderXValue = 0;
     private int odoEncoderYValue = 0;
 
-    static final int    MAX_POS_VIPER_ENCODE_VALUE    =   2600;     // Control Max stretch of viper motor to avoid mechanical stress
+    static final int    MAX_POS_VIPER_ENCODE_VALUE    =   3000;     // Control Max stretch of viper motor to avoid mechanical stress
     static final int    MAX_NEG_VIPER_ENCODE_VALUE    =   -100;     // Control Max stretch of viper motor to avoid mechanical stress
 
-    static final int    MAX_POS_ARM_ENCODE_VALUE    =   2700;     // Control Max stretch of arm motors to avoid mechanical stress
+    static final int    MAX_POS_ARM_ENCODE_VALUE    =   3000;     // Control Max stretch of arm motors to avoid mechanical stress
     static final int    MAX_NEG_ARM_ENCODE_VALUE    =   0;     // Control Max stretch of arm motors to avoid mechanical stress
 
     static final int    VIPER_RETRACT_ENCODER_FRM_GRND = -100; //encoder reading which keep viper/gripeer from up from mother earth , this avoid gripper drag
     static final int    ARM_ENCODER_READING_AFTER_START = 500; //Initial reading where ARM could be for first operation driver wants to perform
     static final int    VIPER_ENCODER_READING_AFTER_START = 500; //Initial reading where viper could be for first operation driver wants to perform
 
-    static final int    HBASKET_POS_VIPER_ENCODE_VALUE    =   2000;     //
-    static final int    HBASKET_POS_ARK_ENCODE_VALUE    =   2000;     //
+    static final int    HBASKET_POS_VIPER_ENCODE_VALUE    =   2480;     //
+    static final int    HBASKET_POS_ARK_ENCODE_VALUE    =   1725;     //
 
-    static final int    LBASKET_POS_VIPER_ENCODE_VALUE    =   1000;     //
+    static final int    LBASKET_POS_VIPER_ENCODE_VALUE    =   2000;     //
     static final int    LBASKET_POS_ARM_ENCODE_VALUE    =   2000;     //
 
-    static final int    HANG_POS_VIPER_ENCODE_VALUE    =   1000;     //
-    static final int    HANG_POS_ARM_ENCODE_VALUE    =   1500;     //
+    static final int    HANG_POS_VIPER_ENCODE_VALUE    =   1460;     //
+    static final int    HANG_POS_ARM_ENCODE_VALUE    =   1290;     //
 
 
     @Override
@@ -210,13 +210,14 @@ public class ArmMot extends LinearOpMode{
                 else{
                 viper.setTargetPosition(viperHoldReading);
                 viper.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                viper.setPower(0.1);
+                viper.setPower(0.6);
                 }
             }
 
             //grab using gripper
             if(gamepad2.right_bumper){
                 gripper.setPosition(0.5);
+
             }
             else{
                 gripper.setPosition(0.2);
@@ -232,7 +233,7 @@ public class ArmMot extends LinearOpMode{
 
                 viper.setTargetPosition(LBASKET_POS_VIPER_ENCODE_VALUE);
                 viper.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                viper.setPower(0.1);
+                viper.setPower(0.6);
                 viperHoldReading = LBASKET_POS_VIPER_ENCODE_VALUE;
             }
 
@@ -246,7 +247,7 @@ public class ArmMot extends LinearOpMode{
 
                 viper.setTargetPosition(HBASKET_POS_VIPER_ENCODE_VALUE);
                 viper.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                viper.setPower(0.1);
+                viper.setPower(0.6);
                 viperHoldReading = HBASKET_POS_VIPER_ENCODE_VALUE;
             }
 
@@ -260,7 +261,7 @@ public class ArmMot extends LinearOpMode{
 
                 viper.setTargetPosition(HANG_POS_VIPER_ENCODE_VALUE);
                 viper.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                viper.setPower(0.1);
+                viper.setPower(0.6);
                 viperHoldReading = HANG_POS_VIPER_ENCODE_VALUE;
             }
 
