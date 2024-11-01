@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
+
 /*
 gamepad1 left stick and right stick is drive control
 
@@ -15,9 +16,9 @@ To make arm and viper ready for higher basket   gamepad2.y
 To make arm and viper ready for lower basket   gamepad2.x
 To make arm and viper ready foe higher rung   gamepad2.back
  */
-@TeleOp(name="ArmMotOpMode", group="Final")
+@TeleOp(name="ArmMotNoExtndLimitOpMode", group="Final")
 
-public class ArmMot extends LinearOpMode{
+public class ArmMotNoExtendLimit extends LinearOpMode{
     /*
     Battery side is the front side!
         RLM : Rear Left Motor(motor0, 0)
@@ -42,18 +43,18 @@ public class ArmMot extends LinearOpMode{
     private int odoEncoderXValue = 0;
     private int odoEncoderYValue = 0;
 
-    static final int    MAX_POS_VIPER_ENCODE_VALUE    =   5000;     // Control Max stretch of viper motor to avoid mechanical stress
-    static final int    MAX_NEG_VIPER_ENCODE_VALUE    =   -100;     // Control Max stretch of viper motor to avoid mechanical stress
+//    static final int    MAX_POS_VIPER_ENCODE_VALUE    =   5000;     // Control Max stretch of viper motor to avoid mechanical stress
+ //   static final int    MAX_NEG_VIPER_ENCODE_VALUE    =   -100;     // Control Max stretch of viper motor to avoid mechanical stress
 
-    static final int    MAX_POS_ARM_ENCODE_VALUE    =   5000;     // Control Max stretch of arm motors to avoid mechanical stress
-    static final int    MAX_NEG_ARM_ENCODE_VALUE    =   0;     // Control Max stretch of arm motors to avoid mechanical stress
+//    static final int    MAX_POS_ARM_ENCODE_VALUE    =   5000;     // Control Max stretch of arm motors to avoid mechanical stress
+//    static final int    MAX_NEG_ARM_ENCODE_VALUE    =   0;     // Control Max stretch of arm motors to avoid mechanical stress
 
     static final int    VIPER_RETRACT_ENCODER_FRM_GRND = -100; //encoder reading which keep viper/gripeer from up from mother earth , this avoid gripper drag
     static final int    ARM_ENCODER_READING_AFTER_START = 500; //Initial reading where ARM could be for first operation driver wants to perform
     static final int    VIPER_ENCODER_READING_AFTER_START = 500; //Initial reading where viper could be for first operation driver wants to perform
 
     static final int    HBASKET_POS_VIPER_ENCODE_VALUE    =   2480;     //
-    static final int    HBASKET_POS_ARM_ENCODE_VALUE    =   1725;     //
+    static final int    HBASKET_POS_ARK_ENCODE_VALUE    =   1725;     //
 
     static final int    LBASKET_POS_VIPER_ENCODE_VALUE    =   2000;     //
     static final int    LBASKET_POS_ARM_ENCODE_VALUE    =   2000;     //
@@ -135,13 +136,6 @@ public class ArmMot extends LinearOpMode{
 
         waitForStart();
 
-        viper.setTargetPosition(VIPER_RETRACT_ENCODER_FRM_GRND);
-        viper.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        viper.setPower(-0.3); //Lift viper above ground so it does not get dragged with robot
-
-
-
-
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
             driveY = -gamepad1.left_stick_y;
@@ -173,9 +167,9 @@ public class ArmMot extends LinearOpMode{
 
 
             //control arm
-            if((varArmmot != 0)   &&
+            if((varArmmot != 0)  /*  &&
                     (armEncoderValue <= MAX_POS_ARM_ENCODE_VALUE) &&
-                    (armEncoderValue >= MAX_NEG_ARM_ENCODE_VALUE)
+                    (armEncoderValue >= MAX_NEG_ARM_ENCODE_VALUE) */
             ) {
                 Armmot.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 Armmot.setPower(-(varArmmot / 2));
@@ -199,12 +193,12 @@ public class ArmMot extends LinearOpMode{
 
 
             //Viper Control
-            if ((gamepad2.dpad_up)   && (viperEncoderValue <= MAX_POS_VIPER_ENCODE_VALUE)) {
+            if ((gamepad2.dpad_up) /*  && (viperEncoderValue <= MAX_POS_VIPER_ENCODE_VALUE)*/) {
 
                 viper.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 viper.setPower(0.6);
                 viperHoldReading = viper.getCurrentPosition();
-            } else if (gamepad2.dpad_down  && (viperEncoderValue >= MAX_NEG_VIPER_ENCODE_VALUE) ) {
+            } else if (gamepad2.dpad_down /* && (viperEncoderValue >= MAX_NEG_VIPER_ENCODE_VALUE) */) {
 
                 viper.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 viper.setPower(-0.6);
@@ -247,10 +241,10 @@ public class ArmMot extends LinearOpMode{
             //target higher basket
             if(gamepad2.y )
             {
-                Armmot.setTargetPosition(HBASKET_POS_ARM_ENCODE_VALUE);
+                Armmot.setTargetPosition(HBASKET_POS_ARK_ENCODE_VALUE);
                 Armmot.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 Armmot.setPower(0.4);
-                armHoldReading = HBASKET_POS_ARM_ENCODE_VALUE;
+                armHoldReading = HBASKET_POS_ARK_ENCODE_VALUE;
 
                 viper.setTargetPosition(HBASKET_POS_VIPER_ENCODE_VALUE);
                 viper.setMode(DcMotor.RunMode.RUN_TO_POSITION);
