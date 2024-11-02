@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
  */
 @Config
 @Autonomous(group = "drive")
-public class _VWAutoIntoDeep  extends LinearOpMode {
+public class _VWAutoIntoDeepObsDeck extends LinearOpMode {
     public static double ANGLE = 90; // deg
     DcMotor Armmot ;
     DcMotor viper;
@@ -79,36 +79,15 @@ Telemetry: This continuously updates the arm and robot positions while the OpMod
          */
         // Build a trajectory sequence
 
-        MoveArm(300);
-        sleep(2000);
-        MoveViper(300);
-
         TrajectorySequence sequence = drive.trajectorySequenceBuilder(new Pose2d())
-                .forward(13)
-                .strafeLeft(70)
+                .forward(8)
+                .strafeRight(70)
 
-                .turn(Math.toRadians(-70))
                 //.forward(10)
                 .build();
 
         // Follow the trajectory sequence
         drive.followTrajectorySequence(sequence);
-        sleep(2000);
-        MoveArm(HBASKET_POS_ARM_ENCODE_VALUE);
-        MoveViper(HBASKET_POS_VIPER_ENCODE_VALUE);
-        sleep(4000);
-        GripperOpen();
-        sequence = drive.trajectorySequenceBuilder(new Pose2d())
-
-                .forward(10) // Move back 50 inches
-                .build();
-        // Follow the trajectory sequence
-        drive.followTrajectorySequence(sequence);
-
-        GripperClose();
-        MoveViper(0);; // Retract arm to original position
-        sleep(2000);
-        MoveArm(0);
 
         if (isStopRequested()) return;
 
