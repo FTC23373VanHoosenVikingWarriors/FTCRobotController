@@ -28,11 +28,12 @@ public class _VWAutoIntoDeepObsDeck extends LinearOpMode {
     private int viperEncoderValue = 0;
     private int odoEncoderXValue = 0;
     private int odoEncoderYValue = 0;
-    static final int    HBASKET_POS_VIPER_ENCODE_VALUE    =   3100;     //
-    static final int    HBASKET_POS_ARM_ENCODE_VALUE    =   1880;     //
+    static final int    HCHAMBER_POS_VIPER_ENCODE_VALUE    =   1000;     //
+    static final int    HCHAMBER_POS_ARM_ENCODE_VALUE    =   900;     //
+    static final int    DISTANCE_TOGO_FOR_CHAMBER  = 28; //Distance robot has to travel so it can position for HCHAMBER specimen hang operation
 
-    static final int    LBASKET_POS_VIPER_ENCODE_VALUE    =   0;     //
-    static final int    LBASKET_POS_ARM_ENCODE_VALUE    =   0;     //
+    static final int    LCHAMBER__POS_VIPER_ENCODE_VALUE    =   0;     //
+    static final int    LCHAMBER__POS_ARM_ENCODE_VALUE    =   0;     //
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -63,31 +64,41 @@ public class _VWAutoIntoDeepObsDeck extends LinearOpMode {
         timer = new ElapsedTime();
 
 
-        /*
-        Trajectory Sequence:
 
-The robot moves forward 50 inches.
-At around 30 inches, the arm starts to extend using a TemporalMarker.
-The gripper is opened at 50 inches to release the object.
-The robot then moves back 40 inches.
-After moving back, another TemporalMarker checks if the robot has moved back 30 inches before retracting the arm.
-Temporal Markers: These allow for executing commands at specific points in the trajectory without blocking the movement.
-
-Pose Estimate: The robot’s current position is checked using drive.getPoseEstimate() to determine when to trigger arm movements.
-
-Telemetry: This continuously updates the arm and robot positions while the OpMode is active.
-         */
         // Build a trajectory sequence
-
         TrajectorySequence sequence = drive.trajectorySequenceBuilder(new Pose2d())
-                .forward(8)
-                .strafeRight(70)
-
-                //.forward(10)
+                .forward(DISTANCE_TOGO_FOR_CHAMBER ) /* Go forward a distance which could take us closer to a place where we can hang specimen */
                 .build();
 
         // Follow the trajectory sequence
         drive.followTrajectorySequence(sequence);
+        sleep(2000);
+
+        MoveArm(HCHAMBER_POS_ARM_ENCODE_VALUE);/* Extend  arm */
+        sleep(2000);
+        MoveViper(HCHAMBER_POS_VIPER_ENCODE_VALUE);/* Extend viper to get exactly near high chamber */
+        sleep(2000);
+        GripperOpen();
+        MoveArm(HCHAMBER_POS_ARM_ENCODE_VALUE-100); /* move arm little down to prevent specimen touching  gripper after hang */
+
+        /* Move back */
+        sequence = drive.trajectorySequenceBuilder(new Pose2d())
+                .back(DISTANCE_TOGO_FOR_CHAMBER -8 )
+                .build();
+        // Follow the trajectory sequence
+        drive.followTrajectorySequence(sequence);
+
+        GripperClose();
+        MoveViper(0);; // Retract viper to original position
+        sleep(2000);
+        MoveArm(0);// Retract arm to original position
+
+        sequence = drive.trajectorySequenceBuilder(new Pose2d())
+                .strafeRight(70) //go to observation area to score 3 points
+                .build();
+        // Follow the trajectory sequence
+        drive.followTrajectorySequence(sequence);
+
 
         if (isStopRequested()) return;
 
