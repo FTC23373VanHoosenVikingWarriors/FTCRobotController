@@ -28,9 +28,9 @@ public class _VWAutoIntoDeepObsDeck extends LinearOpMode {
     private int viperEncoderValue = 0;
     private int odoEncoderXValue = 0;
     private int odoEncoderYValue = 0;
-    static final int    HCHAMBER_POS_VIPER_ENCODE_VALUE    =   1000;     //
-    static final int    HCHAMBER_POS_ARM_ENCODE_VALUE    =   900;     //
-    static final int    DISTANCE_TOGO_FOR_CHAMBER  = 28; //Distance robot has to travel so it can position for HCHAMBER specimen hang operation
+    static final int    HCHAMBER_POS_VIPER_ENCODE_VALUE    =   2000;     //
+    static final int    HCHAMBER_POS_ARM_ENCODE_VALUE    =   980;     //
+    static final int    DISTANCE_TOGO_FOR_CHAMBER  = 20; //Distance robot has to travel so it can position for HCHAMBER specimen hang operation
 
     static final int    LCHAMBER__POS_VIPER_ENCODE_VALUE    =   0;     //
     static final int    LCHAMBER__POS_ARM_ENCODE_VALUE    =   0;     //
@@ -57,7 +57,7 @@ public class _VWAutoIntoDeepObsDeck extends LinearOpMode {
 
 
         waitForStart();
-
+        GripperClose();
         viper.setTargetPosition(VIPER_RETRACT_ENCODER_FRM_GRND);
         viper.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         viper.setPower(-0.3); //Lift viper above ground so it does not get dragged with robot
@@ -83,7 +83,7 @@ public class _VWAutoIntoDeepObsDeck extends LinearOpMode {
 
         /* Move back */
         sequence = drive.trajectorySequenceBuilder(new Pose2d())
-                .back(DISTANCE_TOGO_FOR_CHAMBER -8 )
+                .back(12 )
                 .build();
         // Follow the trajectory sequence
         drive.followTrajectorySequence(sequence);
