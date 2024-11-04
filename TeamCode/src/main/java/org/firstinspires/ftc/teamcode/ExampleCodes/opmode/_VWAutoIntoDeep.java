@@ -29,7 +29,7 @@ public class _VWAutoIntoDeep  extends LinearOpMode {
     private int odoEncoderXValue = 0;
     private int odoEncoderYValue = 0;
     static final int    HBASKET_POS_VIPER_ENCODE_VALUE    =   3100;     //
-    static final int    HBASKET_POS_ARM_ENCODE_VALUE    =   1880;     //
+    static final int    HBASKET_POS_ARM_ENCODE_VALUE    =   1930;     //
 
     static final int    LBASKET_POS_VIPER_ENCODE_VALUE    =   0;     //
     static final int    LBASKET_POS_ARM_ENCODE_VALUE    =   0;     //
@@ -62,21 +62,6 @@ public class _VWAutoIntoDeep  extends LinearOpMode {
         viper.setPower(-0.3); //Lift viper above ground so it does not get dragged with robot
         timer = new ElapsedTime();
 
-
-        /*
-        Trajectory Sequence:
-
-The robot moves forward 50 inches.
-At around 30 inches, the arm starts to extend using a TemporalMarker.
-The gripper is opened at 50 inches to release the object.
-The robot then moves back 40 inches.
-After moving back, another TemporalMarker checks if the robot has moved back 30 inches before retracting the arm.
-Temporal Markers: These allow for executing commands at specific points in the trajectory without blocking the movement.
-
-Pose Estimate: The robot’s current position is checked using drive.getPoseEstimate() to determine when to trigger arm movements.
-
-Telemetry: This continuously updates the arm and robot positions while the OpMode is active.
-         */
         // Build a trajectory sequence
 
         MoveArm(300);
@@ -84,7 +69,7 @@ Telemetry: This continuously updates the arm and robot positions while the OpMod
         MoveViper(300);
 
         TrajectorySequence sequence = drive.trajectorySequenceBuilder(new Pose2d())
-                .forward(13)
+                .forward(10)
                 .strafeLeft(70)
 
                 .turn(Math.toRadians(-70))
@@ -109,6 +94,22 @@ Telemetry: This continuously updates the arm and robot positions while the OpMod
         MoveViper(0);; // Retract arm to original position
         sleep(2000);
         MoveArm(0);
+
+        sequence = drive.trajectorySequenceBuilder(new Pose2d())
+
+                .forward(27) // Move back 50 inches
+                .strafeLeft(30)
+                .forward(14)
+                .build();
+        // Follow the trajectory sequence
+        drive.followTrajectorySequence(sequence);
+
+        MoveArm(1200);
+        sleep(2000);
+        MoveViper(1900);
+        sleep(1000);
+        MoveArm(900);
+
 
         if (isStopRequested()) return;
 

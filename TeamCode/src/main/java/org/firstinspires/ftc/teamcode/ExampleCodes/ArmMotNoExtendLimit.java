@@ -53,8 +53,8 @@ public class ArmMotNoExtendLimit extends LinearOpMode{
     static final int    ARM_ENCODER_READING_AFTER_START = 500; //Initial reading where ARM could be for first operation driver wants to perform
     static final int    VIPER_ENCODER_READING_AFTER_START = 500; //Initial reading where viper could be for first operation driver wants to perform
 
-    static final int    HBASKET_POS_VIPER_ENCODE_VALUE    =   2480;     //
-    static final int    HBASKET_POS_ARK_ENCODE_VALUE    =   1725;     //
+    static final int    HBASKET_POS_VIPER_ENCODE_VALUE    =   3100;     //
+    static final int    HBASKET_POS_ARM_ENCODE_VALUE    =   1800;     //
 
     static final int    LBASKET_POS_VIPER_ENCODE_VALUE    =   2000;     //
     static final int    LBASKET_POS_ARM_ENCODE_VALUE    =   2000;     //
@@ -241,10 +241,10 @@ public class ArmMotNoExtendLimit extends LinearOpMode{
             //target higher basket
             if(gamepad2.y )
             {
-                Armmot.setTargetPosition(HBASKET_POS_ARK_ENCODE_VALUE);
+                Armmot.setTargetPosition(HBASKET_POS_ARM_ENCODE_VALUE);
                 Armmot.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 Armmot.setPower(0.4);
-                armHoldReading = HBASKET_POS_ARK_ENCODE_VALUE;
+                armHoldReading = HBASKET_POS_ARM_ENCODE_VALUE;
 
                 viper.setTargetPosition(HBASKET_POS_VIPER_ENCODE_VALUE);
                 viper.setMode(DcMotor.RunMode.RUN_TO_POSITION);
