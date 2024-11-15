@@ -17,7 +17,7 @@ To make arm and viper ready for higher basket   gamepad2.y
 To make arm and viper ready for lower basket   gamepad2.x
 To make arm and viper ready foe higher rung   gamepad2.back
  */
-@TeleOp(name="OpModePID", group="Final")
+//@TeleOp(name="OpModePID", group="Final")
 
 public class OpModePID extends LinearOpMode {
     /*

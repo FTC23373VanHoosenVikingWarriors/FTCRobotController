@@ -15,7 +15,7 @@ To make arm and viper ready for higher basket   gamepad2.y
 To make arm and viper ready for lower basket   gamepad2.x
 To make arm and viper ready foe higher rung   gamepad2.back
  */
-@TeleOp(name="ArmMotOpMode", group="Final")
+//@TeleOp(name="ArmMotOpMode", group="Final")
 
 public class ArmMot extends LinearOpMode{
     /*
@@ -52,7 +52,7 @@ public class ArmMot extends LinearOpMode{
     static final int    ARM_ENCODER_READING_AFTER_START = 500; //Initial reading where ARM could be for first operation driver wants to perform
     static final int    VIPER_ENCODER_READING_AFTER_START = 500; //Initial reading where viper could be for first operation driver wants to perform
 
-    static final int    HBASKET_POS_VIPER_ENCODE_VALUE    =   3100;     //
+    static final int    HBASKET_POS_VIPER_ENCODE_VALUE    =   2100;     //
     static final int    HBASKET_POS_ARM_ENCODE_VALUE    =   1800;     //
 
     static final int    LBASKET_POS_VIPER_ENCODE_VALUE    =   2000;     //

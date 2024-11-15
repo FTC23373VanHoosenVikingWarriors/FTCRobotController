@@ -16,9 +16,9 @@ To make arm and viper ready for higher basket   gamepad2.y
 To make arm and viper ready for lower basket   gamepad2.x
 To make arm and viper ready foe higher rung   gamepad2.back
  */
-@TeleOp(name="ArmMotNoLimit", group="Final")
+@TeleOp(name="ArmMotNoLimitViper0Pwr", group="Final")
 
-public class ArmMotNoExtendLimit extends LinearOpMode{
+public class ArmMotNoLimitViper0Pwr extends LinearOpMode{
     /*
     Battery side is the front side!
         RLM : Rear Left Motor(motor0, 0)
@@ -211,7 +211,7 @@ public class ArmMotNoExtendLimit extends LinearOpMode{
                 else{
                 viper.setTargetPosition(viperHoldReading);
                 viper.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                viper.setPower(0.3);
+                viper.setPower(0);
                 }
             }
 

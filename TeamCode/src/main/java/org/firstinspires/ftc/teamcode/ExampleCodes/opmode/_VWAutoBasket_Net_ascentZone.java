@@ -16,10 +16,10 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
  * This is a simple routine to test turning capabilities.
  */
 @Config
-@Autonomous(name="_VW_Basket",group = "drive")
-public class _VWAutoIntoDeep  extends LinearOpMode {
+@Autonomous(name="_VW_Basket_Net_AscentZone",group = "drive")
+public class _VWAutoBasket_Net_ascentZone extends LinearOpMode {
 
-    public static double ANGLE = 50; // deg
+    public static double ANGLE = 65; // deg
     DcMotor Armmot ;
     DcMotor viper;
     Servo gripper;
@@ -41,22 +41,27 @@ public class _VWAutoIntoDeep  extends LinearOpMode {
     static final int    LCHAMBER__POS_ARM_ENCODE_VALUE    =   0;     //
 
     public static  int    Sample1Align_x    =   -49;     //
-    public static int    Sample1Align_y    =   -43;     //
+    public static int    Sample1Align_y    =   -8;     //
 
-    public static  int    Sample1_x    =   -49;     //
-    public static int    Sample1_y    =   -28;     //
+    public static  int    Sample2Align_x    =   -58;     //
+    public static int    Sample2Align_y    =   -8;     //
 
-    public static  int    Sample2_x    =   -59;     //
-    public static int    Sample2_y    =   -28;     //
+    public static  int    Sample3Align_x    =   -66;     //
+    public static int    Sample3Align_y    =   -8;     //
+
+
+    public static  int    Sample1_y_parking    =   -62;     //
+    public static int    Sample2_y_parking    =   -58;     //
+    public static int    Sample3_y_parking    =   -54;     //
+
 
     public static  int    BasketAlign_x    =   -58;     //
     public static int    BasketAlign_y    =   -52;
-    public static int    Basket_distance    =   10;
 
 
     public static int   Ascent_x = -35;
     public static  int Ascent_y = -9;
-    public static  int Ascent_angle = -20;
+    public static  int Ascent_angle = -80;
 
     public static int chamber_viper_retract_sleep = 900;
     public static int chamber_arm_retract_sleep = 300;
@@ -96,9 +101,22 @@ public class _VWAutoIntoDeep  extends LinearOpMode {
         new Pose2d(-10, -43, Math.toRadians(90)); //initial position of bot
         //drive.setPoseEstimate(startPose2);
         TrajectorySequence sequence2 = drive.trajectorySequenceBuilder(startPose2)
+                .lineTo(new Vector2d(-34, -43)) //strafe left
+                .lineTo(new Vector2d(-34, -8)) //go above
+                .lineTo(new Vector2d(Sample1Align_x, Sample1Align_y)) //strafe again
+                .lineTo(new Vector2d(Sample1Align_x, Sample1_y_parking)) //bring specimen to net zone
+
                 .lineTo(new Vector2d(Sample1Align_x, Sample1Align_y))
+                .lineTo(new Vector2d(Sample2Align_x, Sample2Align_y))  //go for another sample
+                .lineTo(new Vector2d(Sample2Align_x, Sample2_y_parking))  //bring another sample to net zone\
+                .lineTo(new Vector2d(Sample2Align_x, Sample2Align_y))
+                .lineTo(new Vector2d(Sample3Align_x, Sample3Align_y))
+
+                .lineTo(new Vector2d(Sample3Align_x, Sample3_y_parking))
                 .build();
 
+
+/*
         //Prepare trajectory sequence3:  go forward towards yellow sample
         Pose2d startPose3 = //drive.getPoseEstimate();
         new Pose2d(Sample1Align_x, Sample1Align_y, Math.toRadians(90)); //initial position of bot
@@ -115,7 +133,7 @@ public class _VWAutoIntoDeep  extends LinearOpMode {
                 .lineTo(new Vector2d(BasketAlign_x, BasketAlign_y))
                 .turn(Math.toRadians(-1 * ANGLE))
                 .build();
-/*
+
         //Prepare trajectory sequence5:  go towards second yellow sample
         Pose2d startPose5 = //drive.getPoseEstimate();
         new Pose2d(BasketAlign_x, BasketAlign_y, Math.toRadians(90-ANGLE)); //initial position of bot
@@ -136,13 +154,13 @@ public class _VWAutoIntoDeep  extends LinearOpMode {
 */
         //Prepare trajectory sequence7:  go to ascent zone
         Pose2d startPose7 = //drive.getPoseEstimate();
-                 new Pose2d(BasketAlign_x, BasketAlign_y, Math.toRadians(90-ANGLE)); //initial position of bot
+                 new Pose2d(BasketAlign_x, BasketAlign_y, Math.toRadians(90)); //initial position of bot
         //drive.setPoseEstimate(startPose7);
         TrajectorySequence sequence7 = drive.trajectorySequenceBuilder(startPose7)
                 .lineTo(new Vector2d(Ascent_x, Ascent_y))
                 .turn(Math.toRadians(Ascent_angle))
                 .build();
-
+/*
         TrajectorySequence sequenceFWD = drive.trajectorySequenceBuilder(new Pose2d())
 
                 .back(Basket_distance) // Move back 50 inches
@@ -152,7 +170,7 @@ public class _VWAutoIntoDeep  extends LinearOpMode {
 
                 .forward(Basket_distance) // Move back 50 inches
                 .build();
-
+*/
 
 
         waitForStart();
@@ -189,66 +207,18 @@ public class _VWAutoIntoDeep  extends LinearOpMode {
 
         // execute  trajectory sequence2 , strafe towards yellow sample
         drive.followTrajectorySequence(sequence2);
-        GripperOpen();
 
-        // execute  trajectory sequence3 : go and grab yellow sample
-        drive.followTrajectorySequence(sequence3);
-        GripperClose();
 
-        // execute  trajectory sequence4 : go to basket
-        drive.followTrajectorySequence(sequence4);
-        //drop sample in basket
-        MoveArm(HBASKET_POS_ARM_ENCODE_VALUE);
-        sleep(500);
-        MoveViper(HBASKET_POS_VIPER_ENCODE_VALUE);
-        sleep(3500);
 
-        // Follow the trajectory sequence
-        drive.followTrajectorySequence(sequenceFWD);
 
-        GripperOpen();
-        sleep(600);
-        GripperClose();
-
-        // Follow the trajectory sequence
-        drive.followTrajectorySequence(sequenceBACK);
-
-        MoveViper(-30);; // Retract viper to original position
-        sleep(500);
-        MoveArm(0);// Retract arm to original position
-/*
-        GripperOpen();
-        // execute  trajectory sequence5 : go to second yellow sample
-        drive.followTrajectorySequence(sequence5);
-        GripperClose();
-
-        // execute  trajectory sequence6 : go to basket with second yellow sample
-        drive.followTrajectorySequence(sequence6);
-        //drop sample in basket
-        MoveArm(HBASKET_POS_ARM_ENCODE_VALUE);
-        sleep(500);
-        MoveViper(HBASKET_POS_VIPER_ENCODE_VALUE);
-        sleep(3500);
-        drive.followTrajectorySequence(sequenceFWD);
-        GripperOpen();
-        sleep(600);
-        GripperClose();
-
-        // Follow the trajectory sequence
-        drive.followTrajectorySequence(sequenceBACK);
-
-        MoveViper(-30);; // Retract viper to original position
-        sleep(500);
-        MoveArm(0);// Retract arm to original position
-*/
         // execute  trajectory sequence7 : go to ascent zone
         drive.followTrajectorySequence(sequence7);
 
         //execute arm and viper operation to rest them on low rung
         MoveArm(1200);
-         sleep(2000);
+        sleep(2000);
         MoveViper(1900);
-        sleep(1000);
+        sleep(800);
         MoveArm(900);
 
 
