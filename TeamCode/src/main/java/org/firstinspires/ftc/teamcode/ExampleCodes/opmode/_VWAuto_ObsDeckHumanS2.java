@@ -13,14 +13,13 @@ import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 /*
- *  * /*
+ * /*
  * This Program score a specimen on high chamber
-  then grab another specimen from human player, human player feeding a specimen by placing it on floor , robot put it in high chamber and then park on observation zone
+  then grab another specimen from human player, human player feeding a specimen from outside , put it in high chamber and then park on observation zone
  */
 @Config
-@Autonomous(name="_VW_ObsDeck_Specimen2",group = "drive")
-public class _VWAutoIntoDeepObsDeck extends LinearOpMode {
-    public static double ANGLE = 182; // deg
+@Autonomous(name="_VW_ObsDeck_Specimen2HumanOut",group = "drive")
+public class _VWAuto_ObsDeckHumanS2 extends LinearOpMode {
     DcMotor Armmot ;
     DcMotor viper;
     Servo gripper;
@@ -45,14 +44,18 @@ public class _VWAutoIntoDeepObsDeck extends LinearOpMode {
     public static int    Specimen2align_y    =   -44;     //
 
     public static  int    Specimen2location_x    =   53;     //
-    public static int    Specimen2location_y    =   -54;     //
+    public static int    Specimen2location_y    =   -49;     //
 
-    public static int    Specimen2HumanDelay    =   4000;     //
+    public static int    Specimen2HumanDelay    =   2000;     //
 
-    public static int chamber_viper_retract_sleep = 900;
+    public static int chamber_viper_retract_sleep = 00;
     //public static int chamber_arm_retract_sleep = 300;
-
-
+    public static  int    HPLAYER_POS_VIPER_ENCODE_VALUE    =   000;     //
+    public static  int    HPLAYER_POS_ARM_ENCODE_VALUE    =   2781;     //
+    public static double ANGLE = 182; // deg
+    public static int    S2_HCHAMBER_POS_VIPER_ENCODE_VALUE    =   400;     //
+    public static int    S2_HCHAMBER_POS_ARM_ENCODE_VALUE    =   2080;
+    public static int S2_JHATKA = 300;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -81,20 +84,17 @@ public class _VWAutoIntoDeepObsDeck extends LinearOpMode {
 
                 .build();
 
-        //Prepare trajectory sequence2:  go to get specimen 2 from human
+        //Prepare trajectory sequence2:  go to grab 2nd specimen from human
         Pose2d startPose2 = //drive.getPoseEstimate();//
                 new Pose2d(10, -43, Math.toRadians(90)); //initial position of bot
         //drive.setPoseEstimate(startPose2);
         TrajectorySequence sequence2 = drive.trajectorySequenceBuilder(startPose2)
                 .lineTo(new Vector2d(Specimen2align_x, Specimen2align_y)) //bring specimen to obs
-                .turn(Math.toRadians(ANGLE))
                 .build();
-
-
 
         //Prepare trajectory sequence3:  go to grab a specimen
         Pose2d startPose3 = //drive.getPoseEstimate();//
-                 new Pose2d(Specimen2align_x, Specimen2align_y, Math.toRadians(90+ANGLE)); //initial position of bot
+                 new Pose2d(Specimen2align_x, Specimen2align_y, Math.toRadians(90)); //initial position of bot
         //drive.setPoseEstimate(startPose3);
         TrajectorySequence sequence3 = drive.trajectorySequenceBuilder(startPose3)
                 //.lineTo(new Vector2d(5, -43)) //Go near chamber
@@ -103,7 +103,7 @@ public class _VWAutoIntoDeepObsDeck extends LinearOpMode {
 
         //Prepare trajectory sequence4:   go chamber with 2nd specimen
         Pose2d startPose4 = //drive.getPoseEstimate();//
-                 new Pose2d(Specimen2location_x, Specimen2location_y, Math.toRadians(90+ANGLE)); //initial position of bot
+                 new Pose2d(Specimen2location_x, Specimen2location_y, Math.toRadians(90)); //initial position of bot
         //drive.setPoseEstimate(startPose4);
         TrajectorySequence sequence4 = drive.trajectorySequenceBuilder(startPose4)
                 .lineTo(new Vector2d(Specimen2Hang_x, Specimen2Hang_y)) //Go near chamber
@@ -111,10 +111,11 @@ public class _VWAutoIntoDeepObsDeck extends LinearOpMode {
                 .build();
         //Prepare trajectory sequence5:  go park in obs area
         Pose2d startPose5 = //drive.getPoseEstimate();
-                new Pose2d(Specimen2Hang_x, Specimen2Hang_y, Math.toRadians(90)); //initial position of bot
+                new Pose2d(Specimen2Hang_x, Specimen2Hang_y, Math.toRadians(90+ANGLE)); //initial position of bot
         //drive.setPoseEstimate(startPose5);
         TrajectorySequence sequence5 = drive.trajectorySequenceBuilder(startPose5)
                 .lineTo(new Vector2d(parking_x, parking_y))
+                .turn(Math.toRadians(-90))
                 .build();
 
         waitForStart();
@@ -135,7 +136,7 @@ public class _VWAutoIntoDeepObsDeck extends LinearOpMode {
         MoveArm(HCHAMBER_POS_ARM_ENCODE_VALUE);/* Extend  arm */
         sleep(900);
         MoveViper(HCHAMBER_POS_VIPER_ENCODE_VALUE+100);/* Extend viper to get exactly near high chamber */
-        sleep(2000);
+        sleep(500);
         GripperOpen();
         MoveArm(HCHAMBER_POS_ARM_ENCODE_VALUE-100); /* move arm little down to prevent specimen touching  gripper after hang */
         sleep(900);
@@ -145,25 +146,43 @@ public class _VWAutoIntoDeepObsDeck extends LinearOpMode {
         MoveArm(0);// Retract arm to original position
         viper.setPower(-0.3); //Lift viper above ground so it does not get dragged with robot
 
-        //Pickup 2nd
+        //Go for Pickup 2nd Specimen from human player
         drive.followTrajectorySequence(sequence2);
         GripperOpen();
+        Armmot.setTargetPosition(HPLAYER_POS_ARM_ENCODE_VALUE); //Align arm near wall height
+        Armmot.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        Armmot.setPower(0.4);
+        viper.setTargetPosition(HPLAYER_POS_VIPER_ENCODE_VALUE); //set viper touching  to wall
+        viper.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        viper.setPower(0.4);
         sleep(Specimen2HumanDelay);
-        drive.followTrajectorySequence(sequence3); //grab specimen
+        drive.followTrajectorySequence(sequence3); //grab specimen */
         GripperClose();
-        drive.followTrajectorySequence(sequence4); //go to chamber with 2nd specimen
 
 
+        viper.setTargetPosition(0);
+        viper.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        viper.setPower(0.4);
+        Armmot.setTargetPosition(HPLAYER_POS_ARM_ENCODE_VALUE-200);
+        Armmot.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        Armmot.setPower(0.4);
+        //sleep(500);
+
+
+
+
+        MoveArm(S2_HCHAMBER_POS_ARM_ENCODE_VALUE);/* Extend  arm */
         sleep(500);
-        MoveArm(HCHAMBER_POS_ARM_ENCODE_VALUE);/* Extend  arm */
-        sleep(900);
-        MoveViper(HCHAMBER_POS_VIPER_ENCODE_VALUE+300);/* Extend viper to get exactly near high chamber */
-        sleep(2000);
+        drive.followTrajectorySequence(sequence4); //go to chamber with 2nd specimen
+        MoveViper(S2_HCHAMBER_POS_VIPER_ENCODE_VALUE);/* Extend viper to get exactly near high chamber */
+        sleep(1000);
+        MoveArm(S2_HCHAMBER_POS_ARM_ENCODE_VALUE+  S2_JHATKA );/* Extend  arm */
         GripperOpen();
-        MoveArm(HCHAMBER_POS_ARM_ENCODE_VALUE-100); /* move arm little down to prevent specimen touching  gripper after hang */
-        sleep(900);
-        GripperClose();
+        //MoveArm(HCHAMBER_POS_ARM_ENCODE_VALUE); /* move arm little down to prevent specimen touching  gripper after hang */
+        sleep(300);
         MoveViper(-30);; // Retract viper to original position
+        sleep(500);
+        GripperClose();
         drive.followTrajectorySequence(sequence5); //go to parking in obs area
         sleep(chamber_viper_retract_sleep);
         MoveArm(0);// Retract arm to original position

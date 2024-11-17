@@ -13,13 +13,14 @@ import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 /*
- * This is a simple routine to test turning capabilities.
- */
+ * This Program score a specimen on high chamber
+  then grab a yellow sample, put it in high basket and then park on ascent zone
+  by touching low run */
 @Config
 @Autonomous(name="_VW_Basket",group = "drive")
 public class _VWAutoIntoDeep  extends LinearOpMode {
 
-    public static double ANGLE = 50; // deg
+    public static double ANGLE = 60; // deg
     DcMotor Armmot ;
     DcMotor viper;
     Servo gripper;
@@ -51,12 +52,12 @@ public class _VWAutoIntoDeep  extends LinearOpMode {
 
     public static  int    BasketAlign_x    =   -58;     //
     public static int    BasketAlign_y    =   -52;
-    public static int    Basket_distance    =   10;
+    public static int    Basket_distance    =   8;
 
 
     public static int   Ascent_x = -35;
-    public static  int Ascent_y = -9;
-    public static  int Ascent_angle = -20;
+    public static  int Ascent_y = -2;
+    public static  int Ascent_angle = -40;
 
     public static int chamber_viper_retract_sleep = 900;
     public static int chamber_arm_retract_sleep = 300;
@@ -139,6 +140,7 @@ public class _VWAutoIntoDeep  extends LinearOpMode {
                  new Pose2d(BasketAlign_x, BasketAlign_y, Math.toRadians(90-ANGLE)); //initial position of bot
         //drive.setPoseEstimate(startPose7);
         TrajectorySequence sequence7 = drive.trajectorySequenceBuilder(startPose7)
+
                 .lineTo(new Vector2d(Ascent_x, Ascent_y))
                 .turn(Math.toRadians(Ascent_angle))
                 .build();
@@ -246,8 +248,8 @@ public class _VWAutoIntoDeep  extends LinearOpMode {
 
         //execute arm and viper operation to rest them on low rung
         MoveArm(1200);
-         sleep(2000);
-        MoveViper(1900);
+         sleep(1000);
+        MoveViper(3000);
         sleep(1000);
         MoveArm(900);
 

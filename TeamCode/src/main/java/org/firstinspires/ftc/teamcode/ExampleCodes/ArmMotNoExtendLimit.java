@@ -6,15 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
 /*
-gamepad1 left stick and right stick is drive control
-
-Viper gamepad2.dpad_up and dpad_down
-Arm gamepad2.right_stick_y
-gripper gamepad2.right_bumper
-
-To make arm and viper ready for higher basket   gamepad2.y
-To make arm and viper ready for lower basket   gamepad2.x
-To make arm and viper ready foe higher rung   gamepad2.back
+This is teleop program
  */
 @TeleOp(name="ArmMotNoLimit", group="Final")
 
@@ -61,7 +53,8 @@ public class ArmMotNoExtendLimit extends LinearOpMode{
 
     static final int    HANG_POS_VIPER_ENCODE_VALUE    =   1460;     //
     static final int    HANG_POS_ARM_ENCODE_VALUE    =   1290;     //
-
+    static final int    HPLAYER_POS_VIPER_ENCODE_VALUE    =   -15;     //
+    static final int    HPLAYER_POS_ARM_ENCODE_VALUE    =   2781;
 
     @Override
     public void runOpMode() {
@@ -223,21 +216,19 @@ public class ArmMotNoExtendLimit extends LinearOpMode{
             else{
                 gripper.setPosition(0.2);
             }
-/*
-            //target lower basket
             if(gamepad2.x )
             {
-                Armmot.setTargetPosition(LBASKET_POS_ARM_ENCODE_VALUE);
+                Armmot.setTargetPosition(HPLAYER_POS_ARM_ENCODE_VALUE);
                 Armmot.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 Armmot.setPower(0.4);
-                armHoldReading = LBASKET_POS_ARM_ENCODE_VALUE;
+                armHoldReading = HPLAYER_POS_ARM_ENCODE_VALUE;
 
-                viper.setTargetPosition(LBASKET_POS_VIPER_ENCODE_VALUE);
+                viper.setTargetPosition(HPLAYER_POS_VIPER_ENCODE_VALUE);
                 viper.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 viper.setPower(0.6);
-                viperHoldReading = LBASKET_POS_VIPER_ENCODE_VALUE;
+                viperHoldReading = HPLAYER_POS_VIPER_ENCODE_VALUE;
             }
-
+/*
             //target higher basket
             if(gamepad2.y )
             {
