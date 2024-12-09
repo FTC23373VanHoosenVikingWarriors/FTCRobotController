@@ -66,7 +66,7 @@ public class ArmMotNoExtendLimit extends LinearOpMode{
         double varArmmot;
         int armHoldReading = ARM_ENCODER_READING_AFTER_START; //Initial reading where ARM could be for first operation driver wants to perform
         int viperHoldReading = VIPER_ENCODER_READING_AFTER_START;//Initial reading where viper could be for first operation driver wants to perform
-        double drivePower = 0.65; //global drive power level
+        double drivePower = 0.60; //global drive power level
 
 
 //Hardware maps

@@ -8,9 +8,9 @@ import com.qualcomm.robotcore.hardware.Servo;
 /*
 This is teleop program where viper motor is give 0 power in idle condition, to avoid overheating of motor
  */
-//@TeleOp(name="ArmMotNoLimitViper0Pwr", group="Final")
+@TeleOp(name="ArmMotLimitViper0Pwr", group="Final")
 
-public class ArmMotNoLimitViper0Pwr extends LinearOpMode{
+public class ArmMotLimitViper0Pwr extends LinearOpMode{
     /*
     Battery side is the front side!
         RLM : Rear Left Motor(motor0, 0)
@@ -46,7 +46,8 @@ public class ArmMotNoLimitViper0Pwr extends LinearOpMode{
     static final int    VIPER_ENCODER_READING_AFTER_START = 500; //Initial reading where viper could be for first operation driver wants to perform
 
     static final int    HBASKET_POS_VIPER_ENCODE_VALUE    =   2100;     //
-    static final int    HBASKET_POS_ARM_ENCODE_VALUE    =   1800;     //
+    //static final int    HBASKET_POS_ARM_ENCODE_VALUE    =   1800;     //
+    public static int    HBASKET_POS_ARM_ENCODE_VALUE    =   1930;     //
 
     static final int    HPLAYER_POS_VIPER_ENCODE_VALUE    =   -15;     //
     static final int    HPLAYER_POS_ARM_ENCODE_VALUE    =   2781;     //
@@ -159,8 +160,8 @@ public class ArmMotNoLimitViper0Pwr extends LinearOpMode{
 
 
             //control arm
-            if((varArmmot != 0)  /*  &&
-                    (armEncoderValue <= MAX_POS_ARM_ENCODE_VALUE) &&
+            if((varArmmot != 0)   &&
+                    (armEncoderValue <= HBASKET_POS_ARM_ENCODE_VALUE) /* &&
                     (armEncoderValue >= MAX_NEG_ARM_ENCODE_VALUE) */
             ) {
                 Armmot.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -175,6 +176,7 @@ public class ArmMotNoLimitViper0Pwr extends LinearOpMode{
                     //Do nothing here
                 }
                 else{
+                    //armEncoderValue = HBASKET_POS_ARM_ENCODE_VALUE;
                     Armmot.setTargetPosition(armHoldReading);
                     Armmot.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     Armmot.setPower(0.4);
@@ -215,7 +217,7 @@ public class ArmMotNoLimitViper0Pwr extends LinearOpMode{
             else{
                 gripper.setPosition(0.2);
             }
-
+/*
             //target lower basket
             if(gamepad2.x )
             {
@@ -229,6 +231,8 @@ public class ArmMotNoLimitViper0Pwr extends LinearOpMode{
                 viper.setPower(0.6);
                 viperHoldReading = HPLAYER_POS_VIPER_ENCODE_VALUE;
             }
+
+ */
 /*
             //target higher basket
             if(gamepad2.y )

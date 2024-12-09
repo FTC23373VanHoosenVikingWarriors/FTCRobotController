@@ -20,7 +20,7 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 @Autonomous(name="_VW_Basket",group = "drive")
 public class _VWAutoIntoDeep  extends LinearOpMode {
 
-    public static double ANGLE = 60; // deg
+    public static double ANGLE = 54; // deg
     DcMotor Armmot ;
     DcMotor viper;
     Servo gripper;
@@ -55,9 +55,9 @@ public class _VWAutoIntoDeep  extends LinearOpMode {
     public static int    Basket_distance    =   8;
 
 
-    public static int   Ascent_x = -35;
-    public static  int Ascent_y = -2;
-    public static  int Ascent_angle = -40;
+    public static int   Ascent_x = -45;
+    public static  int Ascent_y = -50;
+    public static  int Ascent_angle = -35;
 
     public static int chamber_viper_retract_sleep = 900;
     public static int chamber_arm_retract_sleep = 300;
@@ -152,7 +152,7 @@ public class _VWAutoIntoDeep  extends LinearOpMode {
 
         TrajectorySequence sequenceBACK = drive.trajectorySequenceBuilder(new Pose2d())
 
-                .forward(Basket_distance) // Move back 50 inches
+                .forward(Basket_distance  ) // Move back 50 inches
                 .build();
 
 
@@ -247,11 +247,11 @@ public class _VWAutoIntoDeep  extends LinearOpMode {
         drive.followTrajectorySequence(sequence7);
 
         //execute arm and viper operation to rest them on low rung
-        MoveArm(1200);
-         sleep(1000);
-        MoveViper(3000);
-        sleep(1000);
-        MoveArm(900);
+        //MoveArm(1200);
+        //sleep(1000);
+        //MoveViper(3000);
+        //sleep(1000);
+        //MoveArm(900);
 
 
         if (isStopRequested()) return;
