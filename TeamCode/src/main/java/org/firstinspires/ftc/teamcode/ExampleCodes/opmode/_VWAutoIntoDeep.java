@@ -277,12 +277,12 @@ public class _VWAutoIntoDeep  extends LinearOpMode {
 
     public void GripperOpen()
     {
-        gripper.setPosition(0.5);
+        gripper.setPosition(0.2);
     }
 
     public void GripperClose()
     {
-        gripper.setPosition(0.2);
+        gripper.setPosition(0.5);
     }
 
 

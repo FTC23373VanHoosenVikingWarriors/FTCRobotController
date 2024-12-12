@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 /*
 This is teleop program
  */
-@TeleOp(name="ArmMotNoLimit", group="Final")
+//@TeleOp(name="ArmMotNoLimit", group="Final")
 
 public class ArmMotNoExtendLimit extends LinearOpMode{
     /*
@@ -46,15 +46,14 @@ public class ArmMotNoExtendLimit extends LinearOpMode{
     static final int    VIPER_ENCODER_READING_AFTER_START = 500; //Initial reading where viper could be for first operation driver wants to perform
 
     static final int    HBASKET_POS_VIPER_ENCODE_VALUE    =   2100;     //
-    static final int    HBASKET_POS_ARM_ENCODE_VALUE    =   1800;     //
+    public static int   HBASKET_POS_ARM_ENCODE_VALUE    =   1570;     //
 
-    static final int    LBASKET_POS_VIPER_ENCODE_VALUE    =   2000;     //
-    static final int    LBASKET_POS_ARM_ENCODE_VALUE    =   2000;     //
+    static final int    HPLAYER_POS_VIPER_ENCODE_VALUE    =   -94;     //
+    static final int    HPLAYER_POS_ARM_ENCODE_VALUE    =   658;     //
 
     static final int    HANG_POS_VIPER_ENCODE_VALUE    =   1460;     //
     static final int    HANG_POS_ARM_ENCODE_VALUE    =   1290;     //
-    static final int    HPLAYER_POS_VIPER_ENCODE_VALUE    =   -15;     //
-    static final int    HPLAYER_POS_ARM_ENCODE_VALUE    =   2781;
+
 
     @Override
     public void runOpMode() {
@@ -160,8 +159,8 @@ public class ArmMotNoExtendLimit extends LinearOpMode{
 
 
             //control arm
-            if((varArmmot != 0)  /*  &&
-                    (armEncoderValue <= MAX_POS_ARM_ENCODE_VALUE) &&
+            if((varArmmot != 0)   &&
+                    (armEncoderValue <= (HBASKET_POS_ARM_ENCODE_VALUE+100)) /* &&
                     (armEncoderValue >= MAX_NEG_ARM_ENCODE_VALUE) */
             ) {
                 Armmot.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -204,17 +203,17 @@ public class ArmMotNoExtendLimit extends LinearOpMode{
                 else{
                 viper.setTargetPosition(viperHoldReading);
                 viper.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                viper.setPower(0.3);
+                viper.setPower(0);
                 }
             }
 
             //grab using gripper
             if(gamepad2.right_bumper){
-                gripper.setPosition(0.5);
+                gripper.setPosition(0.2);
 
             }
             else{
-                gripper.setPosition(0.2);
+                gripper.setPosition(0.5);
             }
             if(gamepad2.x )
             {

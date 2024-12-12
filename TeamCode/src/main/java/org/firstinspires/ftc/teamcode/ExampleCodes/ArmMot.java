@@ -53,7 +53,7 @@ public class ArmMot extends LinearOpMode{
     static final int    VIPER_ENCODER_READING_AFTER_START = 500; //Initial reading where viper could be for first operation driver wants to perform
 
     static final int    HBASKET_POS_VIPER_ENCODE_VALUE    =   2100;     //
-    static final int    HBASKET_POS_ARM_ENCODE_VALUE    =   1800;     //
+    static final int    HBASKET_POS_ARM_ENCODE_VALUE    =   1570;     //
 
     static final int    LBASKET_POS_VIPER_ENCODE_VALUE    =   2000;     //
     static final int    LBASKET_POS_ARM_ENCODE_VALUE    =   2000;     //
@@ -223,11 +223,11 @@ public class ArmMot extends LinearOpMode{
 
             //grab using gripper
             if(gamepad2.right_bumper){
-                gripper.setPosition(0.5);
+                gripper.setPosition(0.2);
 
             }
             else{
-                gripper.setPosition(0.2);
+                gripper.setPosition(0.5);
             }
 
             //target lower basket

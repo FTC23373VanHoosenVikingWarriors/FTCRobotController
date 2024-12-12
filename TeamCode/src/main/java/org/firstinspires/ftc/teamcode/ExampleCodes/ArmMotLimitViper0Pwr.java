@@ -46,14 +46,18 @@ public class ArmMotLimitViper0Pwr extends LinearOpMode{
     static final int    VIPER_ENCODER_READING_AFTER_START = 500; //Initial reading where viper could be for first operation driver wants to perform
 
     static final int    HBASKET_POS_VIPER_ENCODE_VALUE    =   2100;     //
-    //static final int    HBASKET_POS_ARM_ENCODE_VALUE    =   1800;     //
-    public static int    HBASKET_POS_ARM_ENCODE_VALUE    =   1930;     //
+    public static int    HBASKET_POS_ARM_ENCODE_VALUE    =   1570;     //
 
-    static final int    HPLAYER_POS_VIPER_ENCODE_VALUE    =   -15;     //
-    static final int    HPLAYER_POS_ARM_ENCODE_VALUE    =   2781;     //
+    static final int    HPLAYER_POS_VIPER_ENCODE_VALUE    =   -94;     //
+    static final int    HPLAYER_POS_ARM_ENCODE_VALUE    =   658;     //
 
-    static final int    HANG_POS_VIPER_ENCODE_VALUE    =   1460;     //
-    static final int    HANG_POS_ARM_ENCODE_VALUE    =   1290;     //
+    //static final int    HANG_POS_VIPER_ENCODE_VALUE    =   1460;     //
+    //static final int    HANG_POS_ARM_ENCODE_VALUE    =   1290;     //
+
+
+    public static int    HCHAMBER_POS_VIPER_ENCODE_VALUE    =   0;     //
+    public static int    HCHAMBER_POS_ARM_ENCODE_VALUE    =   1100;     //
+
 
 
     @Override
@@ -161,7 +165,7 @@ public class ArmMotLimitViper0Pwr extends LinearOpMode{
 
             //control arm
             if((varArmmot != 0)   &&
-                    (armEncoderValue <= HBASKET_POS_ARM_ENCODE_VALUE) /* &&
+                    (armEncoderValue <= (HBASKET_POS_ARM_ENCODE_VALUE+100)) /* &&
                     (armEncoderValue >= MAX_NEG_ARM_ENCODE_VALUE) */
             ) {
                 Armmot.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -211,14 +215,14 @@ public class ArmMotLimitViper0Pwr extends LinearOpMode{
 
             //grab using gripper
             if(gamepad2.right_bumper){
-                gripper.setPosition(0.5);
+                gripper.setPosition(0.2);
 
             }
             else{
-                gripper.setPosition(0.2);
+                gripper.setPosition(0.5);
             }
-/*
-            //target lower basket
+
+            //target wall height
             if(gamepad2.x )
             {
                 Armmot.setTargetPosition(HPLAYER_POS_ARM_ENCODE_VALUE);
@@ -232,22 +236,21 @@ public class ArmMotLimitViper0Pwr extends LinearOpMode{
                 viperHoldReading = HPLAYER_POS_VIPER_ENCODE_VALUE;
             }
 
- */
-/*
-            //target higher basket
+
+            //target high chamber
             if(gamepad2.y )
             {
-                Armmot.setTargetPosition(HBASKET_POS_ARM_ENCODE_VALUE);
+                Armmot.setTargetPosition(HCHAMBER_POS_ARM_ENCODE_VALUE);
                 Armmot.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 Armmot.setPower(0.4);
-                armHoldReading = HBASKET_POS_ARM_ENCODE_VALUE;
+                armHoldReading = HCHAMBER_POS_ARM_ENCODE_VALUE;
 
-                viper.setTargetPosition(HBASKET_POS_VIPER_ENCODE_VALUE);
+                viper.setTargetPosition(HCHAMBER_POS_VIPER_ENCODE_VALUE);
                 viper.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 viper.setPower(0.6);
-                viperHoldReading = HBASKET_POS_VIPER_ENCODE_VALUE;
+                viperHoldReading = HCHAMBER_POS_VIPER_ENCODE_VALUE;
             }
-
+/*
             //ready to hang higher rung
             if(gamepad2.back)
             {

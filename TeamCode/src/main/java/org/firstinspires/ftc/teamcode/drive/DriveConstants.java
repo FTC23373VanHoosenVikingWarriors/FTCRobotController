@@ -112,8 +112,8 @@ at Gearbox Output Shaft: 753.2 Pulses per Rotation
     public static RevHubOrientationOnRobot.UsbFacingDirection USB_FACING_DIR =
             RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD;
 
-    public static double MAX_VEL = 52.48180821614297;
-    public static double MAX_ACCEL = 52.48180821614297;
+    public static double MAX_VEL = 72.48180821614297;
+    public static double MAX_ACCEL = 72.48180821614297;
     public static double MAX_ANG_VEL = Math.toRadians(184.02607784577722);
     public static double MAX_ANG_ACCEL = Math.toRadians(184.02607784577722);
 
