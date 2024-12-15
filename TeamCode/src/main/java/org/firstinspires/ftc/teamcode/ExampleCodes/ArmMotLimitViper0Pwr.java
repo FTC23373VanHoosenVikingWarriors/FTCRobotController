@@ -57,7 +57,7 @@ public class ArmMotLimitViper0Pwr extends LinearOpMode{
 
     public static int    HCHAMBER_POS_VIPER_ENCODE_VALUE    =   0;     //
     public static int    HCHAMBER_POS_ARM_ENCODE_VALUE    =   1100;     //
-
+    public static double drivePower = 0.70; //global drive power level
 
 
     @Override
@@ -70,7 +70,7 @@ public class ArmMotLimitViper0Pwr extends LinearOpMode{
         double varArmmot;
         int armHoldReading = ARM_ENCODER_READING_AFTER_START; //Initial reading where ARM could be for first operation driver wants to perform
         int viperHoldReading = VIPER_ENCODER_READING_AFTER_START;//Initial reading where viper could be for first operation driver wants to perform
-        double drivePower = 0.60; //global drive power level
+
 
 
 //Hardware maps

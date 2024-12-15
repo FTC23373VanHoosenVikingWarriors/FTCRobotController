@@ -36,35 +36,35 @@ public class _VWAuto_ObsDeckHumanS2Faster extends LinearOpMode {
     public static int comebackFrmChamber = -10;
 
     public static int    parking_x    =   46;     //
-    public static int    parking_y    =   -56;     //
+    public static int    parking_y    =   -59;     //
 
-    public static int    Specimen2Hang_x    =   00;     //
+    public static int    Specimen2Hang_x    =   -4;     //
     public static int    Specimen2Hang_y    =   -32;     //
 
     public static int    Specimen1align_x    =   46;     //
     public static int    Specimen1align_y    =   -48;     //
 
     public static int SpecimenPick_x = 46;
-    public static int SpecimenPick_y = -54;
+    public static int SpecimenPick_y = -51;
     public static int StepOutDistance = -10;
 
     public static int    DelayStartForRaisingARMandViper    = 800  ;     //
     public static int DelayAfterJhatka = 300;
-    public static int    Specimen2HumanDelay    =   500;     //
+    public static int    Specimen2HumanDelay    =   1500;     //
 
     //public static int chamber_viper_retract_sleep = 00;
     //public static int chamber_arm_retract_sleep = 300;
     public static  int    HPLAYER_POS_VIPER_ENCODE_VALUE    =   -94;     //
-    public static  int    HPLAYER_POS_ARM_ENCODE_VALUE    =   650;     //
+    public static  int    HPLAYER_POS_ARM_ENCODE_VALUE    =   500;     //
     public static double ANGLE = 182; // deg
     public static double ANGLE_S2 = -178;
     public static int    S2_HCHAMBER_POS_VIPER_ENCODE_VALUE    =   0;     //
-    public static int    S2_HCHAMBER_POS_ARM_ENCODE_VALUE    =   1200;
+    public static int    S2_HCHAMBER_POS_ARM_ENCODE_VALUE    =   1150;
     public static int S2_JHATKA = 300;
     public static int ChamberFWDDistatnce = 12;
     //public static int TRAVEL_TIME_TO_CHAMBER = 300;
     public static int MAX_WAIT_GOING_CHAMBER_MS = 5000;
-    public static int MAX_WAIT_STRAFE_2SPECIMEN_MS = 15000;
+    public static int MAX_WAIT_STRAFE_2SPECIMEN_MS = 1500;
     public static int MAX_WAIT_GO_CHAMBER_S2_MS = 5000;
 
 

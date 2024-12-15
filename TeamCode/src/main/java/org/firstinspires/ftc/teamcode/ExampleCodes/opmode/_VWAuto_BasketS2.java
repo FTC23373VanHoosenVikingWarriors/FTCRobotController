@@ -26,33 +26,9 @@ public class _VWAuto_BasketS2 extends LinearOpMode {
     static final int    VIPER_RETRACT_ENCODER_FRM_GRND = -100; //encoder reading which keep viper/gripeer from up from mother earth , this avoid gripper drag
     public static double RUNTIME1 = 4.0;
     private ElapsedTime timer;
-/*    private int armEncoderValue = 0;
-    private int viperEncoderValue = 0;
-    private int odoEncoderXValue = 0;
-    private int odoEncoderYValue = 0;
-    static final int    HCHAMBER_POS_VIPER_ENCODE_VALUE    =   1200;     //
-    static final int    HCHAMBER_POS_ARM_ENCODE_VALUE    =   980;     //
-    static final int    DISTANCE_TOGO_FOR_CHAMBER  = 20; //Distance robot has to travel so it can position for HCHAMBER specimen hang operation
 
-    public static  int    parking_x    =   52;     //
-    public static int    parking_y    =   -65;     //
-
-    public static  int    Specimen2Hang_x    =   0;     //
-    public static int    Specimen2Hang_y    =   -43;     //
-
-    public static  int    Specimen2align_x    =   53;     //
-    public static int    Specimen2align_y    =   -44;     //
-
-    public static  int    Specimen2location_x    =   53;     //
-    public static int    Specimen2location_y    =   -54;     //
-
-    public static int    Specimen2HumanDelay    =   4000;     //
-
-    public static int chamber_viper_retract_sleep = 900;
-    //public static int chamber_arm_retract_sleep = 300;
-*/
-    public static  int    Sample1Align_x    =   -53;     //
-    public static int    Sample1Align_y    =   -40;     //
+    public static  int    Sample1Align_x    =   -51;     //
+    public static int    Sample1Align_y    =   -37;     //
 
     public static int    HCHAMBER_POS_VIPER_ENCODE_VALUE    =   0;     //
     public static int    HCHAMBER_POS_ARM_ENCODE_VALUE    =   1100;     //
@@ -64,26 +40,26 @@ public class _VWAuto_BasketS2 extends LinearOpMode {
     public static int    ChamberPosition_y    =   -35;
     public static int comebackFrmChamber = -10;
 
-    public static int    parking_x    =   52;     //
-    public static int    parking_y    =   -65;     //
+    //public static int    parking_x    =   52;     //
+    //public static int    parking_y    =   -65;     //
 
-    public static int    Specimen2Hang_x    =   5;     //
-    public static int    Specimen2Hang_y    =   -38;     //
+    //public static int    Specimen2Hang_x    =   5;     //
+    //public static int    Specimen2Hang_y    =   -38;     //
 
-    public static int    Specimen2align_x    =   56;     //
-    public static int    Specimen2align_y    =   -52;     //
+    //public static int    Specimen2align_x    =   56;     //
+    //public static int    Specimen2align_y    =   -52;     //
 
     public static int    DelayStartForRaisingARMandViper    = 800  ;     //
     public static int DelayAfterJhatka = 300;
-    public static int    Specimen2HumanDelay    =   500;     //
+    //public static int    Specimen2HumanDelay    =   500;     //
 
     //public static int chamber_viper_retract_sleep = 00;
     //public static int chamber_arm_retract_sleep = 300;
     //public static  int    HPLAYER_POS_VIPER_ENCODE_VALUE    =   -94;     //
     //public static  int    HPLAYER_POS_ARM_ENCODE_VALUE    =   658;     //
-    public static double ANGLE = 130; // deg
-    public static double ANGLE_S2 = -110;
-    public static double ANGLE_S3 = 110;
+    public static double ANGLE = 120; // deg
+    public static double ANGLE_S2 = -93;
+    public static double ANGLE_S3 = 100;
 
     //public static int    S2_HCHAMBER_POS_VIPER_ENCODE_VALUE    =   -94;     //
     //public static int    S2_HCHAMBER_POS_ARM_ENCODE_VALUE    =   658;
@@ -91,23 +67,28 @@ public class _VWAuto_BasketS2 extends LinearOpMode {
     public static int TRAVEL_TIME_TO_CHAMBER = 300;
     public static int MAX_WAIT_GOING_CHAMBER_MS = 5000;
     public static int MAX_WAIT_GOING_S1_MS = 5000;
-    public static int MAX_WAIT_GOING_BASKET_MS = 5000;
+    public static int MAX_WAIT_GOING_BASKET_MS = 2000;
     public static int DELAY_FOR_S1_GRAB = 2000;
-    public static int S1_POS_ARM_ENCODE_VALUE = 250;
+    public static int DELAY_FOR_S2_GRAB = 2000;
+    public static int DELAY_FOR_S2_TO_BASKET = 1000;
+    public static int S1_POS_ARM_ENCODE_VALUE = 240;
     public static int S1_POS_VIPER_ENCODE_VALUE = 850;
 
     public static int S2_POS_ARM_ENCODE_VALUE = 250;
-    public static int S2_POS_VIPER_ENCODE_VALUE = 1900;
+    public static int S2_POS_VIPER_ENCODE_VALUE = 2100;
 
-    static final int   HBASKET_POS_VIPER_ENCODE_VALUE    =   2100;     //
+    public final int   HBASKET_POS_VIPER_ENCODE_VALUE    =   2100;     //
     public static int  HBASKET_POS_ARM_ENCODE_VALUE    =   1450;     //
 
-    static final int   HBASKET_S2POS_VIPER_ENCODE_VALUE    =   2200;
-    static final int   HBASKET_S2POS_ARM_ENCODE_VALUE = 1400;
+    public final int   HBASKET_S2POS_VIPER_ENCODE_VALUE    =   2200;
+    public final int   HBASKET_S2POS_ARM_ENCODE_VALUE = 1400;
     public static  int    BasketAlign_x    =   -58;     //
     public static int    BasketAlign_y    =   -52;
     public static int    Basket_distance    =   12;
     public static int    Basket_distance_S2 = 10;
+    public static double PowerArm = 0.4;
+    public static double PowerViper = 0.6;
+    public static int ARMStandPOsition = 1650;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -320,17 +301,20 @@ public class _VWAuto_BasketS2 extends LinearOpMode {
         while (opModeIsActive() && Armmot.isBusy() && (timer.milliseconds() < MAX_WAIT_GOING_S1_MS)) {
             //wait for arm to lower down completely
         }
-        sleep(DELAY_FOR_S1_GRAB);
-        GripperClose();
 
+        sleep(DELAY_FOR_S2_GRAB);
+        GripperClose();
         MoveArm(HBASKET_S2POS_ARM_ENCODE_VALUE);
         while (opModeIsActive() && Armmot.isBusy() && (timer.milliseconds() < MAX_WAIT_GOING_S1_MS)) {
             //wait for arm to lower down completely
         }
         MoveViper(HBASKET_S2POS_VIPER_ENCODE_VALUE);
-        while (opModeIsActive() && viper.isBusy() && (timer.milliseconds() < MAX_WAIT_GOING_S1_MS)) {
+
+
+        sleep(DELAY_FOR_S2_TO_BASKET);
+        /*while (opModeIsActive() && viper.isBusy() && (timer.milliseconds() < MAX_WAIT_GOING_S1_MS)) {
             //wait for arm to lower down completely
-        }
+        }*/
 /*
         Pose2d startPose5 = //drive.getPoseEstimate();
                 new Pose2d(Sample1Align_x             , Sample1Align_y, Math.toRadians(90-ANGLE_S2)); //initial position of bot
@@ -361,7 +345,7 @@ public class _VWAuto_BasketS2 extends LinearOpMode {
 
         TrajectorySequence sequenceBACK1 = drive.trajectorySequenceBuilder(new Pose2d())
                 .back(Basket_distance_S2) // Move fwd
-                .turn(Math.toRadians(-1* ANGLE_S3))
+                //.turn(Math.toRadians(-1* ANGLE_S3))
                 .build();
         timer.reset();
         drive.followTrajectorySequence(sequenceBACK1);
@@ -372,11 +356,11 @@ public class _VWAuto_BasketS2 extends LinearOpMode {
             telemetry.addData("Current Pose", currentPose);
             telemetry.update();
         }
-
-        MoveViper(-30);; // Retract viper to original position
+        GripperClose();
+        //MoveArm(ARMStandPOsition);; // Retract viper to original position
         //drive.followTrajectorySequence(sequence5); //go to parking in obs area
-        MoveArm(0);// Retract arm to original position
-        viper.setPower(-0.3); //Lift viper above ground so it does not get dragged with robot
+        //MoveArm(0);// Retract arm to original position
+        //viper.setPower(-0.3); //Lift viper above ground so it does not get dragged with robot
 
 
         //BasketAlign_x
@@ -409,14 +393,14 @@ public class _VWAuto_BasketS2 extends LinearOpMode {
     {
         viper.setTargetPosition(vEncoderValue);
         viper.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        viper.setPower(0.6);
+        viper.setPower(PowerViper);
     }
 
     public void MoveArm(int aEncoderValue)
     {
         Armmot.setTargetPosition(aEncoderValue);
         Armmot.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        Armmot.setPower(0.4);
+        Armmot.setPower(PowerArm);
     }
 
     public void GripperOpen()

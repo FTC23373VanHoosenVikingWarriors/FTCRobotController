@@ -17,7 +17,7 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
   then grab a yellow sample, put it in high basket and then park on ascent zone
   by touching low run */
 @Config
-@Autonomous(name="_VW_Basket",group = "drive")
+//@Autonomous(name="_VW_Basket",group = "drive")
 public class _VWAutoIntoDeep  extends LinearOpMode {
 
     public static double ANGLE = 54; // deg
